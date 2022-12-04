@@ -1,25 +1,27 @@
 use std::fs;
 use std::collections::HashSet;
 
-fn to_i(s: &str) -> u32 {
-    s.parse().unwrap()
-}
-
 fn main() {
     let input =
         fs::read_to_string("input.txt").unwrap();
 
     let mut part1 = 0;
     let mut part2 = 0;
+
     for line in input.lines() {
-        // [start, end, start, end]
-        let chars: Vec<&str> = line.split(&[',','-']).collect();
+        let bounds: Vec<u8> = line
+            // [start, end, start, end]
+            .split(&[',','-'])
+            // coerce strings to ints
+            .map(|x| x.parse().unwrap())
+            // convert to Vec
+            .collect();
 
         // create hashsets from ranges [start ... end]
-        let range1: HashSet<u32> = HashSet::from_iter(
-            to_i(chars[0])..=to_i(chars[1]));
-        let range2: HashSet<u32> = HashSet::from_iter(
-            to_i(chars[2])..=to_i(chars[3]));
+        let range1: HashSet<u8> =
+            HashSet::from_iter(bounds[0]..=bounds[1]);
+        let range2: HashSet<u8> =
+            HashSet::from_iter(bounds[2]..=bounds[3]);
 
         // part 1
         if range1.is_subset(&range2) || range2.is_subset(&range1) {
